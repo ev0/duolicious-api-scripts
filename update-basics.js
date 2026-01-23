@@ -10,17 +10,27 @@
  * 6. In the Network tab, look for a request with a "PATCH" method.
  * 7. Click it, go to "Headers", and scroll down to "Request Headers".
  * 8. Copy the value next to "Authorization" (the long string starting with Bearer).
- * 9. Paste this code into the Console and run it:
+ * 9. Paste this code below into the Console and run it.
+ * 10. Click F5(Refresh).
  */
 
 (async (t) => {
+  if (t === "PASTE_TOKEN_HERE") return console.error("Error: You must paste your token first!");
+
+  const cleanToken = t.replace(/Authorization|Bearer|[:\s"']+/g, "");
+
   const res = await fetch("https://api.duolicious.app/profile-info", {
     method: "PATCH",
     headers: {
-      "Authorization": `Bearer ${t.replace(/Bearer |"/g, "")}`,
+      "Authorization": `Bearer ${cleanToken}`,
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ bio: " ", tagline: " ", drugs: "No" })
+    body: JSON.stringify({ 
+      bio: " ", 
+      tagline: " ", 
+      drugs: "No" 
+    })
   });
-  console.log(res.ok ? "Success, PRESS F5." : "Error: " + res.status);
+
+  console.log(res.ok ? "✅ Success! Refresh (F5) to see changes." : "❌ Error: " + res.status);
 })("PASTE_TOKEN_HERE");
