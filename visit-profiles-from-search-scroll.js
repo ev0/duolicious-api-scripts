@@ -67,7 +67,7 @@ async function startVisits(limit = 100, minDelay = 100, maxDelay = 300, token = 
         return;
     }
 
-    console.log(`🚀 Starting batch: ${toVisit.length} profiles.`);
+    console.log(`Starting batch: ${toVisit.length} profiles.`);
 
     for (let i = 0; i < toVisit.length; i++) {
         const id = toVisit[i];
