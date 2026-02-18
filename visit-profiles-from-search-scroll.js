@@ -134,5 +134,6 @@ function startVisitsFromPrompt(limit = 100, min = 100, max = 300, token = "") {
     };
 }
 
-console.log(" USAGE COPY PASTE PROFILE UIDS EXAMPLE: startVisitsFromPrompt(5663, 100, 300, "ca984af67ddaa50c21feda19bbd5d8e292e8cea04d45adb585a3df94a06d6f418ebc4dbbca9c455d81a2f7de3e16c028fae32d11eda074a218a7ff3246007913"););
-console.log(" USAGE SCROLL SEARCH PROFILES EXAMPLE: startVisits(5663, 100, 300, "ca984af67ddaa50c21feda19bbd5d8e292e8cea04d45adb585a3df94a06d6f418ebc4dbbca9c455d81a2f7de3e16c028fae32d11eda074a218a7ff3246007913"););
+
+console.log(`USAGE COPY PASTE PROFILE UIDS EXAMPLE: startVisitsFromPrompt(5663, 100, 300, "YOUR_TOKEN");`);
+console.log(`USAGE SCROLL SEARCH PROFILES EXAMPLE: startVisits(5663, 100, 300, "YOUR_TOKEN");`);
