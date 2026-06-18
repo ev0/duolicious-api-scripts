@@ -1,28 +1,28 @@
-uuid=pass
+import re
 
-uuid_example="""ff618e0e-94d7-4894-80b7-9a426f17822b
-ff61b25d-9a4c-4c19-9786-a18c4e4cb181"""
+def clean_uuid_list(original_list_path, log_text_path, output_path):
+    with open(original_list_path, 'r', encoding='utf-8') as f:
+        original_uuids = [line.strip() for line in f if line.strip()]
 
-log_text_example="""VM37:98 [1/6564] ❌ 404
-VM37:98 [2/6564] ❌ 404"""
+    with open(log_text_path, 'r', encoding='utf-8') as f:
+        log_text = f.read()
 
-log_text = pass
+    failed_pattern = re.compile(
+        r'prospect-profile/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})',
+        re.IGNORECASE
+    )
+    failed_uuids = {uid.lower() for uid in failed_pattern.findall(log_text)}
 
-# you need to fill these in yourself, uuids are in the repository,
-# but the log_text to be up to date needs to be fetched yourself.
+    active_uuids = [uid for uid in original_uuids if uid.lower() not in failed_uuids]
 
-def fix_list(uuid_list, log_text):
-    indices = re.findall(r'\[(\d+)/', log_text)
-    indices = sorted([int(i) for i in indices], reverse=True)
-    for idx in indices:
-        try:
-            uuid_list.pop(idx - 1)
-        except IndexError:
-            pass
-    return uuid_list
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(active_uuids))
 
-uuid_as_list = uuid.splitlines()
-cleaned_list = fix_list(uuid_as_list, input_removed)
+    print("--- Filtration Summary ---")
+    print(f"Total UUIDs in original list: {len(original_uuids)}")
+    print(f"Failed (404) UUIDs removed: {len(failed_uuids)}")
+    print(f"Active UUIDs remaining: {len(active_uuids)}")
+    print(f"Saved active list to '{output_path}'")
 
-result_string = "\n".join(cleaned_list)
-print(result_string)
+if __name__ == "__main__":
+    clean_uuid_list('original.txt', 'console_log.txt', 'active_uuids.txt')
