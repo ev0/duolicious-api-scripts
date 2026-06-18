@@ -15,7 +15,7 @@
  ----------------------------------------------------------------------------------
 
  script is pretty outdated, try:
- startVisitsFromPrompt(7820, 650, 650, 'YOUR_TOKEN')
+ startVisitsFromPrompt(7820, 800, 800, 'YOUR_TOKEN')
  */
 
 (function() {
@@ -90,11 +90,10 @@ async function startVisits(limit = 100, minDelay = 100, maxDelay = 300, token = 
             });
 
             if (res.status === 429) {
-                currentMin += 5;
-                currentMax += 5;
-                console.warn(`⚠️ Rate Limited! Waiting ${currentWait / 1000}s...`);
+                currentMin += 105;
+                currentMax += 105;
+                console.warn(`⚠️ Rate Limited! Waiting ${currentWait / 1000}s... and increasing min and max by 105 ms`);
                 await new Promise(r => setTimeout(r, currentWait));
-                currentWait += 1000; 
                 i--; continue; 
             } 
             else if (i % 10 === 0 || !res.ok) {
