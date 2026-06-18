@@ -15,7 +15,7 @@
  ----------------------------------------------------------------------------------
 
  script is pretty outdated, try:
- startVisitsFromPrompt(7820, 590, 590, 'YOUR_TOKEN')
+ startVisitsFromPrompt(7820, 650, 650, 'YOUR_TOKEN')
  */
 
 (function() {
