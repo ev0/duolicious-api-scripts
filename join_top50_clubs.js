@@ -12,7 +12,7 @@
         "cosplay", "mentally ill", "elden ring", "neet", "bdsm",
         "plap plap plap", "persona", "history", "goonin", "brainrot",
 "meow meow meow meow meow", "seeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeex", "berserk", "dm me", "anti-ai",
-        "cat", "femboy", "clingy", "0 social skills", "jorking it",
+        "cat", "femboy", "clingy", "0 social skills", '"jorking it"',
         "philosophy", "femcel", "jjba", "depressed", "movies",
         "videogames", "silent hill", "breakcore", "goth", "dnd",
         "pc", "emo", "lonely", "cat lover", "cooking",
