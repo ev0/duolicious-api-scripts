@@ -8,6 +8,6 @@ Using this information we can use a script that will visit every profile in a li
 
 This way you can also circumvent the intro limit which is 5-10 intros a day, based on my experience.
 
-This CAN SHADOWBAN you, you should separate the scripted visits, maybe max 4000 visits a day? Other things that can trigger a shadowban/ban are NSFW pictures including GIFs and hateful or disturbing language that might deem you as reportable.
+This CAN SHADOWBAN you, you should separate the scripted visits, maybe max 1000 visits per session, up to 2000 per day (2000/day with 2 sessions with 1000 requests, was tested without a suspension) Other things that can trigger a shadowban/ban are NSFW pictures including GIFs and hateful or disturbing language that might deem you as reportable.
 
 The list of UUIDs is not incomplete, due to scrolling being allowed up to about 400-500 profiles, so there needs to be more work done with the filters to see the whole userbase.
