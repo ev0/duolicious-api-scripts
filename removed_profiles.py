@@ -7,11 +7,17 @@ def clean_uuid_list(original_list_path, log_text_path, output_path):
     with open(log_text_path, 'r', encoding='utf-8') as f:
         log_text = f.read()
 
-    failed_pattern = re.compile(
+    uuid_pattern = re.compile(
         r'prospect-profile/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})',
         re.IGNORECASE
     )
-    failed_uuids = {uid.lower() for uid in failed_pattern.findall(log_text)}
+
+    failed_uuids = set()
+    for line in log_text.splitlines():
+        if '404' in line:
+            match = uuid_pattern.search(line)
+            if match:
+                failed_uuids.add(match.group(1).lower())
 
     active_uuids = [uid for uid in original_uuids if uid.lower() not in failed_uuids]
 
@@ -25,4 +31,4 @@ def clean_uuid_list(original_list_path, log_text_path, output_path):
     print(f"Saved active list to '{output_path}'")
 
 if __name__ == "__main__":
-    clean_uuid_list('original.txt', 'console_log.txt', 'active_uuids.txt')
+    clean_uuid_list('uuid', 'console_log.txt', 'active_uuids.txt')
