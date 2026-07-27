@@ -87,7 +87,6 @@ def print_top_clubs(unique_clubs, completed_prefixes):
     for idx, club in enumerate(sorted_clubs[:100], 1):
         name = club.get("name", "Unknown")
         members = get_member_count(club)
-        # Changed :02d to :03d for three-digit alignment
         print(f"{idx:03d}. {name:<35} ({members:,} members)")
     print("=" * 55 + "\n")
 
@@ -95,20 +94,16 @@ async def main():
     alphabet = string.ascii_lowercase
     limiter = AsyncRateLimiter(REQUESTS_PER_MINUTE)
 
-    # Load previous progress if available
     completed_prefixes, unique_clubs = load_state()
 
     print(f"Pacing requests at ~{REQUESTS_PER_MINUTE} RPM (one request every {60.0 / REQUESTS_PER_MINUTE:.2f}s).")
     print("Press Ctrl+C to stop. Your progress will be saved.")
 
     async with aiohttp.ClientSession() as session:
-        # Loop automatically from 'a' to 'z'
         for prefix in alphabet:
             if prefix in completed_prefixes:
-                # Skip already completed letter segments
                 continue
 
-            # Generate only the 676 combinations starting with this prefix
             suffixes = ["".join(combo) for combo in itertools.product(alphabet, repeat=2)]
             queries = [prefix + suffix for suffix in suffixes]
 
@@ -152,7 +147,6 @@ async def main():
                     print(f"Network error on query '{query}': {e}. Retrying in 5 seconds...")
                     await asyncio.sleep(5)
 
-            # Segment complete: mark prefix as done, save state, and display output
             completed_prefixes.append(prefix)
             save_state(completed_prefixes, unique_clubs)
             print_top_clubs(unique_clubs, completed_prefixes)
