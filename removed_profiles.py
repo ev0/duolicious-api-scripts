@@ -1,33 +1,37 @@
 import re
 
 def clean_uuid_list(original_list_path, log_text_path, output_path):
+    # 1. Load the original master list (UUIDs or usernames)
     with open(original_list_path, 'r', encoding='utf-8') as f:
-        original_uuids = [line.strip() for line in f if line.strip()]
+        original_entries = [line.strip() for line in f if line.strip()]
 
+    # 2. Load the console log text
     with open(log_text_path, 'r', encoding='utf-8') as f:
         log_text = f.read()
 
-    uuid_pattern = re.compile(
-        r'prospect-profile/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})',
+    # 3. Match any URL target (/UUID or /username) immediately followed by a 404 status
+    pattern_404 = re.compile(
+        r'duolicious\.app/([a-zA-Z0-9_-]+)\s*\[HTTP/[^\n]*?\s404\b',
         re.IGNORECASE
     )
 
-    failed_uuids = set()
-    for line in log_text.splitlines():
-        if '404' in line:
-            match = uuid_pattern.search(line)
-            if match:
-                failed_uuids.add(match.group(1).lower())
+    failed_ids = set(uid.lower() for uid in pattern_404.findall(log_text))
 
-    active_uuids = [uid for uid in original_uuids if uid.lower() not in failed_uuids]
+    # Also capture from eval console lines if present: (id) ❌ 404
+    eval_pattern = re.compile(r'\(([\w-]+)\)\s*❌\s*404')
+    failed_ids.update(entry.lower() for entry in eval_pattern.findall(log_text))
 
+    # 4. Filter the list: Keep only active IDs (preserves original order)
+    active_entries = [entry for entry in original_entries if entry.lower() not in failed_ids]
+
+    # 5. Save the active list
     with open(output_path, 'w', encoding='utf-8') as f:
-        f.write('\n'.join(active_uuids))
+        f.write('\n'.join(active_entries))
 
     print("--- Filtration Summary ---")
-    print(f"Total UUIDs in original list: {len(original_uuids)}")
-    print(f"Failed (404) UUIDs removed: {len(failed_uuids)}")
-    print(f"Active UUIDs remaining: {len(active_uuids)}")
+    print(f"Total in original list:      {len(original_entries)}")
+    print(f"Failed (404) IDs detected:   {len(failed_ids)}")
+    print(f"Active IDs remaining:        {len(active_entries)}")
     print(f"Saved active list to '{output_path}'")
 
 if __name__ == "__main__":
