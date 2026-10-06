@@ -1,23 +1,3 @@
-/**
- * Duolicious Profile Collector & Visitor
- ----------------------------------------------------------------------------------
- 
- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
- USAGE EXAMPLE: startVisitsFromPrompt(5663, 100, 300, "ca984af67ddaa50c21feda19bbd5d8e292e8cea04d45adb585a3df94a06d6f418ebc4dbbca9c455d81a2f7de3e16c028fae32d11eda074a218a7ff3246007913");
-
- ctrl+shift+i -> network -> look inside Headers for Authorization for example: `inbox-info` shows it
- theres a screenshot of how it looks in the repo
- 
- 
- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
- ----------------------------------------------------------------------------------
-
- script is pretty outdated, try:
- startVisitsFromPrompt(7820, 800, 800, 'YOUR_TOKEN')
- */
-
 (function() {
     window.myProfileList = window.myProfileList || new Set();
     const uuidRegex = /[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/gi;
@@ -69,11 +49,11 @@ async function startVisits(limit = 100, minDelay = 100, maxDelay = 300, token = 
     let currentMin = minDelay;
     let currentMax = maxDelay;
     let currentWait = 10000; // Start at 10s standard
-    
+
     // Use providedIds if they exist, otherwise use the collected list
     let sourceList = providedIds ? providedIds : Array.from(window.myProfileList);
     const toVisit = sourceList.slice(0, limit);
-    
+
     if (toVisit.length === 0) {
         console.error("Queue is empty!");
         return;
@@ -83,9 +63,9 @@ async function startVisits(limit = 100, minDelay = 100, maxDelay = 300, token = 
 
     for (let i = 0; i < toVisit.length; i++) {
         const id = toVisit[i];
-        
+
         try {
-            const res = await fetch(`https://api.duolicious.app/prospect-profile/${id}`, {
+            const res = await fetch(`https://duolicious.app/${id}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -94,8 +74,8 @@ async function startVisits(limit = 100, minDelay = 100, maxDelay = 300, token = 
                 currentMax += 105;
                 console.warn(`⚠️ Rate Limited! Waiting ${currentWait / 1000}s... and increasing min and max by 105 ms`);
                 await new Promise(r => setTimeout(r, currentWait));
-                i--; continue; 
-            } 
+                i--; continue;
+            }
             else if (i % 10 === 0 || !res.ok) {
                 console.log(`[${i + 1}/${toVisit.length}] ${res.ok ? "✅" : "❌ " + res.status}`);
             }
@@ -130,7 +110,7 @@ function startVisitsFromPrompt(limit = 100, min = 100, max = 300, token = "") {
         const text = document.getElementById('idInput').value;
         const idArray = text.trim().split(/\s+/).filter(id => id.length > 5);
         document.body.removeChild(overlay);
-        
+
         if (idArray.length > 0) {
             console.log(`✅ Loaded ${idArray.length} IDs from prompt.`);
             startVisits(limit, min, max, token, idArray);
@@ -141,5 +121,18 @@ function startVisitsFromPrompt(limit = 100, min = 100, max = 300, token = "") {
 }
 
 
-console.log(`USAGE COPY PASTE PROFILE UIDS EXAMPLE: startVisitsFromPrompt(2889, 100, 300, "YOUR_TOKEN");`);
-console.log(`USAGE SCROLL SEARCH PROFILES EXAMPLE: startVisits(2889, 100, 300, "YOUR_TOKEN");`);
+console.log(`USAGE COPY PASTE PROFILE UIDS EXAMPLE: startVisitsFromPrompt(2889, 800, 800, "YOUR_TOKEN");`);
+console.log(`USAGE SCROLL SEARCH PROFILES EXAMPLE: startVisits(2889, 800, 800, "YOUR_TOKEN");`);
+
+/**
+ * Duolicious Profile Collector & Visitor
+
+ 
+ USAGE EXAMPLE: startVisitsFromPrompt(5663, 100, 300, "ca984af67ddaa50c21feda19bbd5d8e292e8cea04d45adb585a3df94a06d6f418ebc4dbbca9c455d81a2f7de3e16c028fae32d11eda074a218a7ff3246007913");
+
+ ctrl+shift+i -> network -> look inside Headers for Authorization for example: `inbox-info` shows it
+ theres a screenshot of how it looks in the repo
+ 
+ script is pretty outdated, try:
+ startVisitsFromPrompt(7820, 800, 800, 'YOUR_TOKEN')
+ */
